@@ -1,6 +1,8 @@
-from flask import request, jsonify
 from . import users_bp
 from utils.db_utils import get_db
+from flask import request, jsonify
+from werkzeug.security import check_password_hash, generate_password_hash
+
 
 db = get_db()
 users_collection = db['usuarios']
@@ -36,13 +38,13 @@ def delete_user(rut):
         return jsonify({"message": "Usuario eliminado exitosamente."}), 200
     return jsonify({"error": "Usuario no encontrado."}), 404
 
-# Create user with RUT verification
+# Create user with RUT verification and hashed password
 @users_bp.route('/usuarios', methods=['POST'])
 def create_user():
     data = request.json
     
     # Required fields
-    required_fields = ["rut", "Nombres", "apellidos", "correo", "contrasena", "codigo_RFID", "tipo_usuario"]
+    required_fields = ["rut", "nombre", "apellido", "correo", "contrasena", "codigo_RIFD", "tipo_usuario"]
     
     # Check missing fields
     missing_fields = [field for field in required_fields if field not in data]
@@ -53,6 +55,40 @@ def create_user():
     if users_collection.find_one({"rut": data["rut"]}):
         return jsonify({"error": "El RUT ya existe."}), 400
 
+    # Hash the password
+    data["contrasena"] = generate_password_hash(data["contrasena"], method='pbkdf2:sha256')
+
     # Insert user
     users_collection.insert_one(data)
     return jsonify({"message": "Usuario creado exitosamente."}), 201
+
+
+# Login endpoint
+@users_bp.route('/login', methods=['POST'])
+def login_user():
+    data = request.json
+
+    # Validate input
+    if not data or 'rut' not in data or 'contrasena' not in data:
+        return jsonify({"error": "RUT y contraseña son requeridos."}), 400
+
+    # Search user by RUT
+    user = users_collection.find_one({"rut": data["rut"]})
+    if not user:
+        return jsonify({"error": "Usuario no encontrado."}), 404
+
+    # Check password
+    if not check_password_hash(user['contrasena'], data['contrasena']):
+        return jsonify({"error": "Contraseña incorrecta."}), 401
+
+    # Success response
+    return jsonify({
+        "message": "Login exitoso.",
+        "user": {
+            "rut": user["rut"],
+            "nombre": user["nombre"],
+            "apellido": user["apellido"],
+            "correo": user["correo"],
+            "tipo_usuario": user["tipo_usuario"]
+        }
+    }), 200
