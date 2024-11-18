@@ -1,10 +1,10 @@
 from flask import Flask
-from blueprints.users import users_bp 
-from config import Config  
+from blueprints.users import users_bp  
+from config import Config
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object(Config)  
+    app.config.from_object(Config)
 
     
     app.register_blueprint(users_bp)
