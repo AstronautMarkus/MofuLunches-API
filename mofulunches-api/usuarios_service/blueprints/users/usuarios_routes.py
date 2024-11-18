@@ -1,7 +1,9 @@
 from . import users_bp
 from utils.db_utils import get_db
 from flask import request, jsonify
+from flask_jwt_extended import create_access_token, create_refresh_token, jwt_required
 from werkzeug.security import check_password_hash, generate_password_hash
+
 
 
 db = get_db()
@@ -9,12 +11,14 @@ users_collection = db['usuarios']
 
 # Get all users
 @users_bp.route('/usuarios', methods=['GET'])
+@jwt_required()
 def get_users():
     users = list(users_collection.find({}, {"_id": 0, "contrasena": 0}))  # exclude password field
     return jsonify(users), 200
 
 # Get user by RUT
 @users_bp.route('/usuarios/<rut>', methods=['GET'])
+@jwt_required()
 def get_user_by_rut(rut):
     user = users_collection.find_one({"rut": rut}, {"_id": 0, "contrasena": 0})  # exclude password field
     if user:
@@ -23,6 +27,7 @@ def get_user_by_rut(rut):
 
 # Update user
 @users_bp.route('/usuarios/<rut>', methods=['PUT'])
+@jwt_required()
 def update_user(rut):
     data = request.json
     result = users_collection.update_one({"rut": rut}, {"$set": data})
@@ -32,6 +37,7 @@ def update_user(rut):
 
 # Delete user
 @users_bp.route('/usuarios/<rut>', methods=['DELETE'])
+@jwt_required()
 def delete_user(rut):
     result = users_collection.delete_one({"rut": rut})
     if result.deleted_count:
@@ -40,6 +46,7 @@ def delete_user(rut):
 
 # Create user with RUT verification and hashed password
 @users_bp.route('/usuarios', methods=['POST'])
+@jwt_required()
 def create_user():
     data = request.json
     
@@ -65,6 +72,7 @@ def create_user():
 
 # Login endpoint
 @users_bp.route('/login', methods=['POST'])
+@jwt_required()
 def login_user():
     data = request.json
 
@@ -81,8 +89,12 @@ def login_user():
     if not check_password_hash(user['contrasena'], data['contrasena']):
         return jsonify({"error": "Contraseña incorrecta."}), 401
 
+    # Create JWT tokens
+    access_token = create_access_token(identity=user["rut"])
+    refresh_token = create_refresh_token(identity=user["rut"])
+
     # Success response
-    return jsonify({
+    response = jsonify({
         "message": "Login exitoso.",
         "user": {
             "rut": user["rut"],
@@ -91,4 +103,10 @@ def login_user():
             "correo": user["correo"],
             "tipo_usuario": user["tipo_usuario"]
         }
-    }), 200
+    })
+    
+    # Set tokens in headers
+    response.headers["Authorization"] = f"Bearer {access_token}"
+    response.headers["Refresh-Token"] = refresh_token
+
+    return response, 200
