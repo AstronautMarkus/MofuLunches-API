@@ -10,13 +10,13 @@ users_collection = db['usuarios']
 # Get all users
 @users_bp.route('/usuarios', methods=['GET'])
 def get_users():
-    users = list(users_collection.find({}, {"_id": 0}))  # no ID field
+    users = list(users_collection.find({}, {"_id": 0, "contrasena": 0}))  # exclude password field
     return jsonify(users), 200
 
 # Get user by RUT
 @users_bp.route('/usuarios/<rut>', methods=['GET'])
 def get_user_by_rut(rut):
-    user = users_collection.find_one({"rut": rut}, {"_id": 0})
+    user = users_collection.find_one({"rut": rut}, {"_id": 0, "contrasena": 0})  # exclude password field
     if user:
         return jsonify(user), 200
     return jsonify({"error": "Usuario no encontrado."}), 404
