@@ -25,7 +25,7 @@ def get_user_by_rut(rut):
     return jsonify({"error": "Usuario no encontrado."}), 404
 
 # Update user
-@users_bp.route('/usuarios/<rut>', methods=['PUT'])
+@users_bp.route('/usuarios/<rut>', methods=['PATCH'])
 
 def update_user(rut):
     data = request.json
