@@ -78,6 +78,16 @@ def create_user():
     return jsonify({"message": "Usuario creado exitosamente."}), 201
 
 
+# Update user PUT method
+@users_bp.route('/usuarios/<rut>', methods=['PUT'])
+def edit_user(rut):
+    data = request.json
+    result = users_collection.update_one({"rut": rut}, {"$set": data})
+
+    if result.matched_count:
+        return jsonify({"message": "Usuario actualizado exitosamente."}), 200
+    return jsonify({"error": "Usuario no encontrado."}), 404
+
 # Login endpoint
 @users_bp.route('/login', methods=['POST'])
 
