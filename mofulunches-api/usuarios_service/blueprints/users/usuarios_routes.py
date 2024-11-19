@@ -29,10 +29,23 @@ def get_user_by_rut(rut):
 
 def update_user(rut):
     data = request.json
+    
+    # Normalize data
+    if "nombre" in data:
+        data["nombre"] = data["nombre"].capitalize()
+    if "apellido" in data:
+        data["apellido"] = data["apellido"].capitalize()
+    if "correo" in data:
+        data["correo"] = data["correo"].lower()
+    if "codigo_RIFD" in data:
+        data["codigo_RIFD"] = data["codigo_RIFD"].upper()
+    if "tipo_usuario" in data:
+        data["tipo_usuario"] = data["tipo_usuario"].lower()
+
     result = users_collection.update_one({"rut": rut}, {"$set": data})
     if result.matched_count:
         return jsonify({"message": "Usuario actualizado exitosamente."}), 200
-    return jsonify({"error": "User not found"}), 404
+    return jsonify({"error": "Usuario no encontrado."}), 404
 
 # Delete user
 @users_bp.route('/usuarios/<rut>', methods=['DELETE'])
@@ -68,8 +81,6 @@ def create_user():
     data["codigo_RIFD"] = data["codigo_RIFD"].upper()
     data["tipo_usuario"] = data["tipo_usuario"].lower()
     
-    
-
     # Hash the password
     data["contrasena"] = generate_password_hash(data["contrasena"], method='pbkdf2:sha256')
 
