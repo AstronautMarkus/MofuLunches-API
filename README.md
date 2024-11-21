@@ -551,3 +551,86 @@ SECRET_KEY = "flask-secret-key"
 }
 ```
 
+### 5. Modify carta
+
+**URL**: `/cartas/<string:id>/alimentos`
+
+**Method**: `PUT`
+
+**Description**: Modify the list of alimentos in a carta by adding or deleting an item.
+
+**Body**
+
+```json
+  {
+    "operation": "{operation}", // add or delete
+    "alimento": {
+      "id": "{alimento_id}",
+      "nombre": "{alimento_nombre}"
+    }
+  }
+```
+
+**Response - Alimento added (200)**:
+
+```json
+{
+  "message": "Alimento agregado exitosamente."
+}
+```
+
+**Response - Alimento deleted (200)**:
+
+```json
+{
+  "message": "Alimento eliminado exitosamente."
+}
+```
+
+**Response - Operation is invalid (400)**:
+
+```json
+{
+  "message": "Operación inválida. Usa 'add' o 'delete'."
+}
+```
+
+**Response - Missing fields (400)**:
+
+```json
+{
+  "message": "Datos del alimento inválidos o faltantes ('id' y 'nombre' son obligatorios)."
+}
+```
+
+**Response - Carta not found (404)**:
+
+```json
+{
+  "message": "Carta no encontrada."
+}
+```
+
+**Response - Alimento not exists in carta (404)**:
+
+```json
+{
+  "message": "El alimento no existe en la carta."
+}
+```
+**Response - If trying to add an alimento that already exists in the carta (409)**:
+
+```json
+{
+  "message": "El alimento ya existe en la carta."
+}
+```
+**Response - Other errors (500)**:
+
+```json
+{
+  "message": "Error al modificar los alimentos: <error_message>."
+}
+
+```
+
