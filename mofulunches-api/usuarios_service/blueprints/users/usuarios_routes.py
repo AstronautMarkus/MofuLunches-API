@@ -37,8 +37,8 @@ def update_user(rut):
         data["apellido"] = data["apellido"].capitalize()
     if "correo" in data:
         data["correo"] = data["correo"].lower()
-    if "codigo_RIFD" in data:
-        data["codigo_RIFD"] = data["codigo_RIFD"].upper()
+    if "codigo_RFID" in data:
+        data["codigo_RFID"] = data["codigo_RFID"].upper()
     if "tipo_usuario" in data:
         data["tipo_usuario"] = data["tipo_usuario"].lower()
 
@@ -63,7 +63,7 @@ def create_user():
     data = request.json
     
     # Required fields
-    required_fields = ["rut", "nombre", "apellido", "correo", "contrasena", "codigo_RIFD", "tipo_usuario"]
+    required_fields = ["rut", "nombre", "apellido", "correo", "contrasena", "codigo_RFID", "tipo_usuario"]
     
     # Check missing fields
     missing_fields = [field for field in required_fields if field not in data]
@@ -78,7 +78,7 @@ def create_user():
     data["nombre"] = data["nombre"].capitalize()
     data["apellido"] = data["apellido"].capitalize()
     data["correo"] = data["correo"].lower()
-    data["codigo_RIFD"] = data["codigo_RIFD"].upper()
+    data["codigo_RFID"] = data["codigo_RFID"].upper()
     data["tipo_usuario"] = data["tipo_usuario"].lower()
     
     # Hash the password
