@@ -24,28 +24,35 @@ def get_user_by_rut(rut):
         return jsonify(user), 200
     return jsonify({"error": "Usuario no encontrado."}), 404
 
-# Update user
-@users_bp.route('/usuarios/<rut>', methods=['PATCH'])
-
+# Update user full data
+@users_bp.route('/usuarios/<rut>', methods=['PUT'])
 def update_user(rut):
     data = request.json
-    
-    # Normalize data
-    if "nombre" in data:
-        data["nombre"] = data["nombre"].capitalize()
-    if "apellido" in data:
-        data["apellido"] = data["apellido"].capitalize()
-    if "correo" in data:
-        data["correo"] = data["correo"].lower()
-    if "codigo_RFID" in data:
-        data["codigo_RFID"] = data["codigo_RFID"].upper()
-    if "tipo_usuario" in data:
-        data["tipo_usuario"] = data["tipo_usuario"].lower()
 
-    result = users_collection.update_one({"rut": rut}, {"$set": data})
+    # Check if all required fields are present
+    required_fields = ["apellido", "codigo_RFID", "correo", "nombre", "rut", "tipo_usuario"]
+    missing_fields = [field for field in required_fields if field not in data]
+    
+    if missing_fields:
+        return jsonify({"error": "Faltan campos obligatorios.", "missing_fields": missing_fields}), 400
+
+    # Normalize data
+    normalized_data = {
+        "nombre": data["nombre"].capitalize(),
+        "apellido": data["apellido"].capitalize(),
+        "correo": data["correo"].lower(),
+        "codigo_RFID": data["codigo_RFID"].upper(),
+        "tipo_usuario": data["tipo_usuario"].lower(),
+        "rut": rut  # Ensure the rut in the URL matches the one being updated
+    }
+
+    # Update the user, excluding the password
+    result = users_collection.update_one({"rut": rut}, {"$set": normalized_data})
+    
     if result.matched_count:
         return jsonify({"message": "Usuario actualizado exitosamente."}), 200
     return jsonify({"error": "Usuario no encontrado."}), 404
+
 
 # Delete user
 @users_bp.route('/usuarios/<rut>', methods=['DELETE'])
@@ -89,8 +96,8 @@ def create_user():
     return jsonify({"message": "Usuario creado exitosamente."}), 201
 
 
-# Update user PUT method
-@users_bp.route('/usuarios/<rut>', methods=['PUT'])
+# Update user Partial data
+@users_bp.route('/usuarios/<rut>', methods=['PATCH'])
 def edit_user(rut):
     data = request.json
     result = users_collection.update_one({"rut": rut}, {"$set": data})
