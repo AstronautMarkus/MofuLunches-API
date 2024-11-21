@@ -333,3 +333,221 @@ Headers:
     "error": "Contraseña incorrecta."
 }
 ```
+
+
+---
+
+
+## Cartas service
+
+Service in charge of serving the menus, fed by the Alimentos service, in charge of creating, modifying, deleting, adding/removing food to the menus. Cartas service is located in the /alimentos-service folder next to Alimentos service.
+
+This service is created with Flask, using [Requirements.txt](https://github.com/AstronautMarkus/MofuLunches-API/blob/dev/mofulunches-api/alimentos_service/requirements.txt) file, also needs a dotenv() file for run.
+
+### dotenv() settings
+
+```
+MONGO_URI = "your-mongo-db-uri"
+SECRET_KEY = "flask-secret-key"
+```
+
+## Cartas service endpoints
+
+### 1. Get all Cartas
+
+**URL**: `/cartas`
+
+**Method**: `GET`
+
+**Description**: Get all cartas list, rates and food content.
+
+**Response**:
+
+```json
+[
+    {
+        "alimentos": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            },
+            {
+                "id": "105",
+                "nombre": "Coca cola"
+            }
+        ],
+        "calificaciones": {
+            "promedio": 4.6,
+            "total_calificaciones": 5
+        },
+        "fecha": "2024-11-20",
+        "id": "1"
+    }
+]
+```
+
+
+### 2. Get all Cartas by id
+
+**URL**: `/cartas/<id>`
+
+**Method**: `GET`
+
+**Description**: Get a carta by ID, full content.
+
+**Response**:
+
+```json
+[
+    {
+        "alimentos": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            },
+            {
+                "id": "105",
+                "nombre": "Coca cola"
+            }
+        ],
+        "calificaciones": {
+            "promedio": 4.6,
+            "total_calificaciones": 5
+        },
+        "fecha": "2024-11-20",
+        "id": "1"
+    }
+]
+```
+
+
+**Response - No cartas in ID (404)**:
+
+```json
+[
+    {
+        "message": "Carta no encontrada."
+    }
+]
+```
+
+### 3. Create new carta
+
+**URL**: `/cartas`
+
+**Method**: `POST`
+
+**Description**: Create a carta.
+
+**Body**
+
+```json
+{
+    "id": "1",
+    "fecha": "2024-11-21",
+    "alimentos":[
+        {
+            "id": "101",
+            "nombre": "Pizza de pepperoni"
+        },
+        {
+            "id": "102",
+            "nombre": "Ensalada César"
+        },
+        {
+            "id": "105",
+            "nombre": "Coca cola"
+        }
+    ]
+}
+```
+
+**Response - Created carta (200)**:
+
+```json
+{
+    "message": "Carta creada exitosamente."
+}
+```
+
+
+**Response - ID already exists (409)**:
+
+```json
+{
+    "message": "Ya existe una carta con este ID."
+}
+```
+
+**Response - Alimentos field are not arraylist (400)**:
+
+```json
+{
+    "message": "El campo 'alimentos' debe ser una lista con 'id' y 'nombre' en cada elemento."
+}
+```
+
+**Response - Missing fields (400)**:
+
+```json
+{
+    "message": "Campos faltantes: {fields}"
+}
+```
+
+**Response - Other error (500)**:
+
+```json
+{
+    "message": "Error al crear la carta: {errors}"
+}
+```
+
+### 4. Create new carta
+
+**URL**: `/cartas/<id>/calificar`
+
+**Method**: `POST`
+
+**Description**: Rate a carta, from 0 to 5.
+
+**Body**
+
+```json
+{
+    "calificacion":5
+}
+```
+
+**Response - Created carta (200)**:
+
+```json
+{
+    "message": "Calificación registrada."
+}
+```
+
+**Response - If calificacion is more than 5 or less than 0 (400)**:
+
+```json
+{
+    "message": "La calificación debe ser un número entre 1 y 5."
+}
+```
+
+**Response - Carta not exists (404)**:
+
+```json
+{
+    "message": "Carta no encontrada."
+}
+```
+
