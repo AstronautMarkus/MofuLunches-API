@@ -13,6 +13,14 @@ def get_cartas():
     cartas = list(cartas_collection.find({}, {"_id": 0}))  # exclude _id field
     return jsonify(cartas), 200
 
+# Get carta by id
+@cartas_bp.route('/cartas/<string:id>', methods=['GET'])
+def get_carta(id):
+    carta = cartas_collection.find_one({"id": id}, {"_id": 0})
+    if not carta:
+        return jsonify({"message": "Carta no encontrada."}), 404
+    return jsonify(carta), 200
+
 
 # Create new carta
 @cartas_bp.route('/cartas', methods=['POST'])
