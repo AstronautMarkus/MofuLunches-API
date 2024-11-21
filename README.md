@@ -634,3 +634,130 @@ SECRET_KEY = "flask-secret-key"
 
 ```
 
+### 6. Get all Alimentos
+
+**URL**: `/alimentos`
+
+**Method**: `GET`
+
+**Description**: Get all alimentos list, ids and data.
+
+**Response**:
+
+```json
+[
+    {
+        "id": "1",
+        "nombre": "Pure de patatas",
+        "tipo": "almuerzo"
+    },
+    {
+        "id": "2",
+        "nombre": "Ensalada cesar",
+        "tipo": "ensalada"
+    },
+    {
+        "id": "3",
+        "nombre": "Coca cola",
+        "tipo": "bebestible"
+    }
+]
+```
+
+
+### 7. Create new alimento
+
+**URL**: `/alimentos`
+
+**Method**: `POST`
+
+**Description**: Create a new alimento.
+
+**Body**:
+
+```json
+[
+    {
+        "id":"",
+        "nombre":"",
+        "tipo":""
+    }
+]
+```
+
+
+**Response - Created alimento (200)**:
+
+```json
+[
+    {
+        "message": "Alimento creado exitosamente."
+    }
+]
+```
+
+**Response - id exists (400)**:
+
+```json
+[
+    {
+        "message": "El ID ya existe."
+    }
+]
+```
+
+**Response - Missing fields (400)**:
+
+```json
+[
+    {
+        "message": "Campos faltantes: {campos}"
+    }
+]
+```
+
+### 8. Updates alimento
+
+**URL**: `/alimentos/<id>`
+
+**Method**: `PUT`
+
+**Description**: Updates specific data or all data for an Alimento.
+
+**Body (you can put one or all of the data)**:
+
+```json
+[
+    {
+        "id":"",
+        "nombre":"",
+        "tipo":""
+    }
+]
+```
+
+
+**Response - Updated alimento (200)**:
+
+```json
+{
+    "message": "Alimento actualizado exitosamente."
+}
+```
+
+**Response - No data provided (400)**:
+
+```json
+{
+    "message": "Datos no proporcionados."
+}
+```
+
+**Response - Alimento id not exists (404)**:
+
+```json
+{
+    "message": "Alimento no encontrado."
+}
+```
+
