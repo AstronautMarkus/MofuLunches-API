@@ -4,7 +4,13 @@
     "fecha_pedido":"",
     "cod_diario":"",
     "cod_unico":"",
-    "alimento":"",
+    "alimentos": [
+        {
+            "id":"",
+            "nombre":"",
+            "tipo":""
+        }
+    ],
     "hora_retiro":"",
     "estado":""
 }
