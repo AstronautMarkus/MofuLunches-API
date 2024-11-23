@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}" type="image/x-icon">
+    <title>Status - MofuLunches API</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 2rem;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+        header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        header img {
+            height: 60px;
+            margin-right: 15px;
+        }
+        header h1 {
+            color: #4CAF50;
+            font-size: 2rem;
+            margin: 0;
+        }
+        table {
+            width: 70%;
+            margin: 2rem auto;
+            border-collapse: collapse;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            padding: 1rem;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .online {
+            color: green;
+            font-weight: bold;
+        }
+        .offline {
+            color: red;
+            font-weight: bold;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='img/icon.png') }}" alt="Logo de MofuLunches">
+        <h1>MofuLunches API</h1>
+    </header>
+
+    <h2 style="text-align: center;">Estado de los Servicios</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Servicio</th>
+                <th>Estado</th>
+                <th>URL</th>
+            </tr>
+        </thead>
+        <tbody id="status-table">
+            {% for service, details in statuses.items() %}
+            <tr>
+                <td><strong>{{ service }}</strong></td>
+                <td class="{{ 'online' if details.status == 'Online' else 'offline' }}">{{ details.status }}</td>
+                <td>
+                    <a href="{{ details.url }}" target="_blank">{{ details.url }}</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="button-container">
+        <button onclick="reloadStatus()">Recargar Estado</button>
+    </div>
+
+    <script>
+        async function reloadStatus() {
+            try {
+                const response = await fetch('/status');
+                const html = await response.text();
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newTable = doc.querySelector('#status-table').innerHTML;
+                document.querySelector('#status-table').innerHTML = newTable;
+            } catch (error) {
+                console.error('Error recargando el estado:', error);
+                alert('No se pudo recargar el estado. Intenta nuevamente.');
+            }
+        }
+    </script>
+</body>
+</html>
