@@ -1,9 +1,14 @@
 from flask import Flask, render_template
 import requests
+from blueprints import register_blueprints 
 
 def create_app():
     app = Flask(__name__)
     app.config.from_object('config.DevelopmentConfig')
+
+    # Register blueprints
+    register_blueprints(app)
+
 
     @app.route('/status', methods=['GET'])
     def check_services_status():
@@ -23,11 +28,12 @@ def create_app():
             except requests.exceptions.RequestException:
                 # If service is not available, store status as Offline
                 statuses[service_name] = {'status': 'Offline', 'url': service_url}
-  
+     
         return render_template('status.html', statuses=statuses)
 
     return app
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
+
