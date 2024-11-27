@@ -102,3 +102,18 @@ def modify_carta(id):
         print(f"Error al conectar con el servicio de alimentos: {e}")
 
         return jsonify({"error": "No se pudo conectar con el servicio de alimentos."}), 502
+
+# Rate carta by id
+
+@alimentos_bp.route('/cartas/<int:id>/calificar', methods=['POST'])
+def rate_carta(id):
+    service_url = f"{current_app.config['ALIMENTOS_SERVICE_URL']}/cartas/{id}/calificar"
+    try:
+        response = requests.post(service_url, json=request.json)
+
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+
+        print(f"Error al conectar con el servicio de alimentos: {e}")
+
+        return jsonify({"error": "No se pudo conectar con el servicio de alimentos."}), 502

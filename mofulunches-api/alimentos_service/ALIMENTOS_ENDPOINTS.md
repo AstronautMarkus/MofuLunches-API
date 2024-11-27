@@ -121,7 +121,6 @@ SECRET_KEY = "flask-secret-key"
 
 ```json
 {
-    "id": "1",
     "fecha": "2024-11-21",
     "alimentos":[
         {
@@ -181,7 +180,7 @@ SECRET_KEY = "flask-secret-key"
 }
 ```
 
-### 4. Create new carta
+### 4. Rate a carta
 
 **URL**: `/cartas/<id>/calificar`
 

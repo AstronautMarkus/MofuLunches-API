@@ -2,6 +2,7 @@ from bson import ObjectId
 from . import cartas_bp
 from utils.db_utils import get_db
 from flask import request, jsonify
+from datetime import datetime
 
 
 db = get_db()
@@ -11,11 +12,24 @@ cartas_collection = db['cartas']
 @cartas_bp.route('/cartas', methods=['GET'])
 def get_cartas():
     cartas = list(cartas_collection.find({}, {"_id": 0}))  # exclude _id field
+
+    # Convert fecha field to "YYYY-MM-DD" format
+    for carta in cartas:
+        if "fecha" in carta and isinstance(carta["fecha"], datetime):
+            # Convert to string in "YYYY-MM-DD" format
+            carta["fecha"] = carta["fecha"].strftime("%Y-%m-%d")
+
     return jsonify(cartas), 200
 
 # Get carta by id
 @cartas_bp.route('/cartas/<string:id>', methods=['GET'])
 def get_carta(id):
+    try:
+        # Convert id to integer
+        id = int(id)
+    except ValueError:
+        return jsonify({"message": "El ID debe ser un número entero."}), 400
+
     carta = cartas_collection.find_one({"id": id}, {"_id": 0})
     if not carta:
         return jsonify({"message": "Carta no encontrada."}), 404
@@ -25,7 +39,7 @@ def get_carta(id):
 # Create new carta
 @cartas_bp.route('/cartas', methods=['POST'])
 def create_carta():
-    required_fields = ["id", "fecha", "alimentos"]  # Required fields
+    required_fields = ["fecha", "alimentos"]  # Required fields
     carta = request.json
 
     # Check missing fields
@@ -33,9 +47,17 @@ def create_carta():
     if missing_fields:
         return jsonify({"message": f"Campos faltantes: {', '.join(missing_fields)}"}), 400
 
-    # Check duplicated data
-    if cartas_collection.find_one({"id": carta["id"]}):
-        return jsonify({"message": "Ya existe una carta con este ID."}), 409
+    # Generate a new numeric ID
+    last_carta = cartas_collection.find_one(sort=[("id", -1)])
+    new_id = (last_carta["id"] + 1) if last_carta else 1
+    carta["id"] = new_id
+
+    # Validate fecha field
+    try:
+    # Save fecha in datetime format
+        carta["fecha"] = datetime.strptime(carta["fecha"], "%Y-%m-%d").replace(hour=0, minute=0, second=0, microsecond=0)
+    except ValueError:
+        return jsonify({"message": "El campo 'fecha' debe tener el formato 'YYYY-MM-DD'."}), 400
 
     # Validate alimentos field
     if not isinstance(carta["alimentos"], list) or not all(
@@ -56,6 +78,12 @@ def create_carta():
 # Rate carta
 @cartas_bp.route('/cartas/<string:id>/calificar', methods=['POST'])
 def calificar_carta(id):
+    # Convert id to integer
+    try:
+        id = int(id)
+    except ValueError:
+        return jsonify({"message": "El ID debe ser un número válido."}), 400
+
     calificacion = request.json.get("calificacion")
 
     # Check rate value between 1 and 5
