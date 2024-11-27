@@ -63,7 +63,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 ```
 
 
-### 2. Get Get users by rut
+### 2. Get users by rut
 
 **URL**: `/api/usuarios/<rut>`
 
@@ -492,6 +492,282 @@ For this endpoint, you can filter by date using query params, in this case using
 ```json
 {
     "message": "Calificación registrada."
+}
+```
+
+---
+
+## Endpoints - Pedidos
+
+### 1. Get all pedidos
+
+**URL**: `/api/pedidos`
+
+**Method**: `GET`
+
+**Description**: Get all pedidos list.
+
+**Response**:
+
+```json
+[
+    {
+        "apellido": "Markihnos",
+        "codigo_RFID": "111111111",
+        "correo": "astronautmarkus@gmail.com",
+        "nombre": "Astronauta",
+        "rut": "111111111",
+        "tipo_usuario": "admin"
+    }
+]
+```
+
+### 2. Get daily pedidos
+
+**URL**: `/api/pedidos/diarios`
+
+**Method**: `GET`
+
+**Description**: Get only daily pedidos.
+
+**Response**:
+
+```json
+[
+    {
+        "_id": "67422eff0ea32bd70cacd2a6",
+        "alimento": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            }
+        ],
+        "cod_diario": "001",
+        "cod_unico": "00001",
+        "estado": "Listo para recoger",
+        "fecha_pedido": "2024-11-22", 
+        "hora_retiro": "13:00",
+        "rut": "12345678-9"
+    }
+
+]
+```
+
+### 3. Get daily pedidos
+
+**URL**: `/api/pedidos/diarios`
+
+**Method**: `GET`
+
+**Description**: Get only daily pedidos.
+
+> Note:
+Let's assume today is 2024-11-22.
+
+**Response**:
+
+```json
+[
+    {
+        "_id": "67422eff0ea32bd70cacd2a6",
+        "alimento": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            }
+        ],
+        "cod_diario": "001",
+        "cod_unico": "00001",
+        "estado": "Listo para recoger",
+        "fecha_pedido": "2024-11-22", 
+        "hora_retiro": "13:00",
+        "rut": "12345678-9"
+    }
+
+]
+```
+
+### 4. Get pedidos by RUT
+
+**URL**: `/api/pedidos/<rut>`
+
+**Method**: `GET`
+
+**Description**: Get all pedidos from an user, using its RUT.
+
+
+**Response**:
+
+```json
+[
+    {
+        "_id": "67422eff0ea32bd70cacd2a6",
+        "alimento": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            }
+        ],
+        "cod_diario": "001",
+        "cod_unico": "00001",
+        "estado": "Listo para recoger",
+        "fecha_pedido": "2024-11-22", 
+        "hora_retiro": "13:00",
+        "rut": "12345678-9"
+    },
+    {
+        "_id": "67422eff0ea32bd70cacd2a7",
+        "alimento": [
+            {
+                "id": "103",
+                "nombre": "Hamburguesa"
+            },
+            {
+                "id": "104",
+                "nombre": "Papas fritas"
+            }
+        ],
+        "cod_diario": "002",
+        "cod_unico": "00002",
+        "estado": "En preparación",
+        "fecha_pedido": "2024-11-23", 
+        "hora_retiro": "12:30",
+        "rut": "12345678-9"
+    },
+    {
+        "_id": "67422eff0ea32bd70cacd2a8",
+        "alimento": [
+            {
+                "id": "105",
+                "nombre": "Sushi"
+            },
+            {
+                "id": "106",
+                "nombre": "Té verde"
+            }
+        ],
+        "cod_diario": "003",
+        "cod_unico": "00003",
+        "estado": "Entregado",
+        "fecha_pedido": "2024-11-24", 
+        "hora_retiro": "14:00",
+        "rut": "12345678-9"
+    }
+]
+```
+
+### 5. Get daily pedido by RUT
+
+**URL**: `/api/pedidos/diarios/<rut>`
+
+**Method**: `GET`
+
+**Description**: Get daily pedido from an user, using its RUT.
+
+> Note:
+Let's assume today is 2024-11-22 and user RUT is 12345678-9.
+
+
+**Response**:
+
+```json
+[
+    {
+        "_id": "67422eff0ea32bd70cacd2a6",
+        "alimento": [
+            {
+                "id": "101",
+                "nombre": "Pizza de pepperoni"
+            },
+            {
+                "id": "102",
+                "nombre": "Ensalada César"
+            }
+        ],
+        "cod_diario": "001",
+        "cod_unico": "00001",
+        "estado": "Listo para recoger",
+        "fecha_pedido": "2024-11-22", 
+        "hora_retiro": "13:00",
+        "rut": "12345678-9"
+    }
+]
+```
+
+### 6. Create pedido
+
+**URL**: `/api/pedidos`
+
+**Method**: `POST`
+
+**Description**: Create a new pedido, using a Body
+
+**Body**:
+```json
+[
+    {
+        "rut":"",
+        "alimentos":[
+            {
+                "id":"",
+                "nombre":""
+            }
+        ]
+        "hora_retiro":""
+    }
+]
+```
+
+**Response**:
+
+```json
+{
+  "message": "Pedido creado exitosamente"
+}
+```
+
+### 7. Update pedido status using cod_unico
+
+**URL**: `/api/pedidos/<cod_unico>`
+
+**Method**: `PUT`
+
+**Description**: Updates pedido status, using the cod_unico.
+
+**Body**:
+```json
+[
+{
+  "hora_retiro": "14:50",
+  "estado": "listo_para_retiro"
+}
+
+]
+```
+
+**Response**:
+
+```json
+{
+  "message": "Pedido actualizado exitosamente",
+  "pedido": {
+    "cod_unico": "12345",
+    "hora_retiro": "15:30",
+    "estado": "listo_para_retiro",
+    "hora_modificacion": "14:50"
+  }
 }
 ```
 

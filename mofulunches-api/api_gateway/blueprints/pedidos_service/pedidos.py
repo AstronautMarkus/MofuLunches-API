@@ -23,29 +23,10 @@ def get_pedidos():
 def get_pedidos_diarios():
     service_url = f"{current_app.config['PEDIDOS_SERVICE_URL']}/pedidos/diarios"
     try:
-        
         response = requests.get(service_url)
-
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
-
         print(f"Error al conectar con el servicio de pedidos: {e}")
-
-        return jsonify({"error": "No se pudo conectar con el servicio de pedidos."}), 502
-    
-# Get daily pedidos
-@pedidos_bp.route('/pedidos/diarios', methods=['GET'])
-def get_pedidos_semanales():
-    service_url = f"{current_app.config['PEDIDOS_SERVICE_URL']}/pedidos/diarios"
-    try:
-        
-        response = requests.get(service_url)
-
-        return jsonify(response.json()), response.status_code
-    except requests.exceptions.RequestException as e:
-
-        print(f"Error al conectar con el servicio de pedidos: {e}")
-
         return jsonify({"error": "No se pudo conectar con el servicio de pedidos."}), 502
 
 # Get pedidos by RUT
