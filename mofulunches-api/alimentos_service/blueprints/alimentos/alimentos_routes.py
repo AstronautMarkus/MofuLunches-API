@@ -17,33 +17,38 @@ def get_alimentos():
 @alimentos_bp.route('/alimentos', methods=['POST'])
 def create_alimento():
     data = request.json
+
     if not data:
         return jsonify({"message": "Datos no proporcionados"}), 400
     
-    missing_fields = [field for field in ["id", "nombre", "tipo"] if field not in data]
+    # Missing fields
+    missing_fields = [field for field in ["nombre", "tipo"] if field not in data]
     if missing_fields:
         return jsonify({"message": f"Campos faltantes: {', '.join(missing_fields)}"}), 400
 
-    if alimentos_collection.find_one({"id": data["id"]}):
-        return jsonify({"message": "El ID ya existe"}), 400
+    # Generate ID
+    id_counter = db["counters"]  # Collection counters
+    counter = id_counter.find_one_and_update(
+        {"_id": "alimento_id"},
+        {"$inc": {"sequence_value": 1}},
+        upsert=True,  # Create if not exists
+        return_document=True
+    )
+    new_id = counter.get("sequence_value", 1)
 
     alimento = {
-        "id": data.get("id", ""),
-        "nombre": data.get("nombre", ""),
-        "tipo": data.get("tipo", "")
+        "id": new_id,  # Autoincremental
+        "nombre": data.get("nombre", "").capitalize(),
+        "tipo": data.get("tipo", "").lower()
     }
-
-    if "nombre" in data:
-        alimento["nombre"] = alimento["nombre"].capitalize()
-    if "tipo" in data:
-        alimento["tipo"] = alimento["tipo"].lower()  
 
     result = alimentos_collection.insert_one(alimento)
 
     # Convert ObjectId to string
     alimento["_id"] = str(result.inserted_id)
-    
-    return jsonify({"message": "Alimento creado exitosamente."}), 201
+
+    return jsonify({"message": "Alimento creado exitosamente.", "alimento": alimento}), 201
+
 
 # Update alimento PUT 
 @alimentos_bp.route('/alimentos/<string:id>', methods=['PUT'])
