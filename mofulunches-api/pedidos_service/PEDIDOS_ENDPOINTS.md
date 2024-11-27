@@ -248,3 +248,69 @@ SECRET_KEY = "flask-secret-key"
   "message": "El RUT ya tiene un pedido registrado para hoy."
 }
 ```
+
+### 6. Update pedido status using cod_unico
+
+**URL**: `/pedidos/<cod_unico>`
+
+**Method**: `PUT`
+
+**Description**: Updates the 'estado' of a pedido in database.
+
+**Body**:
+
+```json
+[
+{
+  "hora_retiro": "15:30",
+  "estado": "listo_para_retiro"
+}
+]
+```
+
+**Response - Created pedido (201)**: 
+
+```json
+{
+  "message": "Pedido actualizado exitosamente",
+  "pedido": {
+    "cod_unico": "12345",
+    "hora_retiro": "15:30",
+    "estado": "listo_para_retiro",
+    "hora_modificacion": "14:50"
+  }
+}
+```
+
+**Response - hora_retiro format is invalid (400)**: 
+
+```json
+{
+  "message": "El formato de hora_retiro es inválido. Debe ser '%H:%M'."
+}
+```
+
+**Response - estado value is invalid (400)**: 
+
+```json
+{
+  "message": "Estado inválido. Valores permitidos: preparando, listo_para_retiro, retirado."
+}
+```
+
+**Response - cod_unico doesn't exist (404)**: 
+
+```json
+{
+  "message": "Pedido no encontrado"
+}
+
+```
+
+**Response - unexpected errors (500)**: 
+
+```json
+{
+  "message": "Error interno del servidor. Intenta más tarde."
+}
+```
