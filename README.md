@@ -37,3 +37,20 @@ Search for endpoint documentation of specific services:
 </div>
 
 ---
+
+
+## Service Ports
+
+Here are the ports used by each service in the MofuLunches-API:
+
+- **Alimentos/Cartas Service**: `5001`
+- **Pedidos Service**: `5002`
+- **Usuarios Service**: `5003`
+
+- **Mofulunches-Web** (not a service, you can find it [here](https://github.com/AstronautMarkus/MofuLunches-Web)): `5004`
+
+- **Mofulunches-Totem** (not a service, you can find it [here](https://github.com/AstronautMarkus/MofuLunches-Totem)): `5173`
+
+- **API Gateway**: `5000`
+
+These ports are configurable and can be changed based on deployment requirements.
