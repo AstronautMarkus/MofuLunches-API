@@ -3,9 +3,9 @@ import requests
 
 alimentos_bp = Blueprint('alimentos', __name__)
 
-# 1. Gell all users
+# Get all alimentos
 @alimentos_bp.route('/alimentos', methods=['GET'])
-def get_users():
+def get_alimentos():
     service_url = f"{current_app.config['ALIMENTOS_SERVICE_URL']}/alimentos"
     try:
         response = requests.get(service_url)
