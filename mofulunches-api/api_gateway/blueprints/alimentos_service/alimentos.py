@@ -49,14 +49,24 @@ def update_alimento(id):
 @alimentos_bp.route('/cartas', methods=['GET'])
 def get_cartas():
     service_url = f"{current_app.config['ALIMENTOS_SERVICE_URL']}/cartas"
+
+    # Get query params
+    desde = request.args.get("desde")
+    hasta = request.args.get("hasta")
+
+    # Set params
+    params = {}
+    if desde:
+        params["desde"] = desde  # Send as 'desde' to the service
+    if hasta:
+        params["hasta"] = hasta  # Send as 'hasta' to the service
+
     try:
-        
-        response = requests.get(service_url)
+        # Request to the service
+        response = requests.get(service_url, params=params)
 
         return jsonify(response.json()), response.status_code
     except requests.exceptions.RequestException as e:
-
-        print(f"Error al conectar con el servicio de alimentos: {e}")
 
         return jsonify({"error": "No se pudo conectar con el servicio de alimentos."}), 502
     

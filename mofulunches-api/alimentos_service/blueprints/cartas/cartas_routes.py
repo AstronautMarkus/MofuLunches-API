@@ -11,12 +11,33 @@ cartas_collection = db['cartas']
 # Get all cartas
 @cartas_bp.route('/cartas', methods=['GET'])
 def get_cartas():
-    cartas = list(cartas_collection.find({}, {"_id": 0}))  # exclude _id field
+    # Query params
+    fecha_inicio = request.args.get("desde") # min date
+    fecha_fin = request.args.get("hasta") # max date
 
-    # Convert fecha field to "YYYY-MM-DD" format
+    # MongoDB filter
+    filtro = {}
+    if fecha_inicio or fecha_fin:
+        filtro["fecha"] = {}
+        if fecha_inicio:
+            try:
+                # Convert fecha_inicio to datetime object
+                filtro["fecha"]["$gte"] = datetime.strptime(fecha_inicio, "%Y-%m-%d")
+            except ValueError:
+                return jsonify({"message": "El parámetro 'fecha_inicio' debe tener el formato 'YYYY-MM-DD'."}), 400
+        if fecha_fin:
+            try:
+                # Convert fecha_fin to datetime object
+                filtro["fecha"]["$lte"] = datetime.strptime(fecha_fin, "%Y-%m-%d")
+            except ValueError:
+                return jsonify({"message": "El parámetro 'fecha_fin' debe tener el formato 'YYYY-MM-DD'."}), 400
+
+    # MongoDB query
+    cartas = list(cartas_collection.find(filtro, {"_id": 0}))
+
+    # Convert datetime objects to string
     for carta in cartas:
         if "fecha" in carta and isinstance(carta["fecha"], datetime):
-            # Convert to string in "YYYY-MM-DD" format
             carta["fecha"] = carta["fecha"].strftime("%Y-%m-%d")
 
     return jsonify(cartas), 200
