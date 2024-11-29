@@ -47,7 +47,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 **Response**:
 
 ```json
-[
+
     {
         "apellido": "Markihnos",
         "codigo_RFID": "111111111",
@@ -64,7 +64,7 @@ Before we start, we clarify that if you need to see the precise documentation of
         "rut": "222222222",
         "tipo_usuario": "cocineros"
     }
-]
+
 ```
 
 
@@ -79,7 +79,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 **Response**:
 
 ```json
-[
+
     {
         "apellido": "Markihnos",
         "codigo_RFID": "111111111",
@@ -88,7 +88,7 @@ Before we start, we clarify that if you need to see the precise documentation of
         "rut": "111111111",
         "tipo_usuario": "admin"
     }
-]
+
 ```
 
 ### 3. Create new user
@@ -102,7 +102,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 **Body**:
 
 ```json
-[
+
     {
         "apellido": "Hakurei",
         "codigo_RFID": "123456789",
@@ -112,17 +112,17 @@ Before we start, we clarify that if you need to see the precise documentation of
         "rut": "123456789",
         "tipo_usuario": "admin"
     }
-]
+
 ```
 
 **Response**:
 
 ```json
-[
+
     {
     "message": "Usuario creado exitosamente."
     }
-]
+
 ```
 
 ### 4. Update user fully
@@ -136,7 +136,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 **Body**:
 
 ```json
-[
+
     {
         "apellido": "Hakurei",
         "codigo_RFID": "123456789",
@@ -145,17 +145,17 @@ Before we start, we clarify that if you need to see the precise documentation of
         "rut": "123456789",
         "tipo_usuario": "admin"
     }
-]
+
 ```
 
 **Response - Updated (200)**:
 
 ```json
-[
+
     {
     "message": "Usuario actualizado exitosamente."
     }
-]
+
 ```
 
 ### 5. Update user partially
@@ -169,7 +169,7 @@ Before we start, we clarify that if you need to see the precise documentation of
 **Body**:
 
 ```json
-[
+
     {
         "apellido": "Hakurei",
         "codigo_RFID": "123456789",
@@ -178,7 +178,7 @@ Before we start, we clarify that if you need to see the precise documentation of
         "rut": "123456789",
         "tipo_usuario": "admin"
     }
-]
+
 ```
 
 You can put one or more characters as you prefer.
@@ -186,11 +186,11 @@ You can put one or more characters as you prefer.
 **Response**:
 
 ```json
-[
+
     {
     "message": "Usuario actualizado exitosamente."
     }
-]
+
 ```
 
 # 6. Login user
@@ -242,7 +242,7 @@ You can put one or more characters as you prefer.
 **Response**:
 
 ```json
-[
+
     {
         "alimentos": [
             {
@@ -265,7 +265,7 @@ You can put one or more characters as you prefer.
         "fecha": "2024-11-20",
         "id": "1"
     }
-]
+
 ```
 
 ### 2. Create alimento
@@ -279,24 +279,23 @@ You can put one or more characters as you prefer.
 **Body**:
 
 ```json
-[
+
     {
-        "id":"",
         "nombre":"",
         "tipo":""
     }
-]
+
 ```
 
 
 **Response - Created alimento (200)**:
 
 ```json
-[
+
     {
         "message": "Alimento creado exitosamente."
     }
-]
+
 ```
 
 ### 3. Update alimento by id
@@ -310,24 +309,23 @@ You can put one or more characters as you prefer.
 **Body**:
 
 ```json
-[
+
     {
-        "id":"",
         "nombre":"",
         "tipo":""
     }
-]
+
 ```
 
 
 **Response - Created alimento (200)**:
 
 ```json
-[
+
     {
         "message": "Alimento actualizado exitosamente."
     }
-]
+
 ```
 
 
@@ -345,7 +343,7 @@ You can put one or more characters as you prefer.
 For this endpoint, you can filter by date using query params, in this case using desde=YYYY-MM-DD and hasta=YYYY-MM-DD.
 
 ```json
-[
+
     {
         "alimentos": [
             {
@@ -368,7 +366,7 @@ For this endpoint, you can filter by date using query params, in this case using
         "fecha": "2024-11-20",
         "id": "1"
     }
-]
+
 ```
 
 
@@ -383,7 +381,7 @@ For this endpoint, you can filter by date using query params, in this case using
 **Response**:
 
 ```json
-[
+
     {
         "alimentos": [
             {
@@ -406,10 +404,10 @@ For this endpoint, you can filter by date using query params, in this case using
         "fecha": "2024-11-20",
         "id": "1"
     }
-]
+
 ```
 
-### 6. Get carta by id 
+### 6. Create carta
 
 **URL**: `/api/cartas`
 
@@ -515,7 +513,7 @@ For this endpoint, you can filter by date using query params, in this case using
 **Response**:
 
 ```json
-[
+
     {
         "apellido": "Markihnos",
         "codigo_RFID": "111111111",
@@ -524,7 +522,7 @@ For this endpoint, you can filter by date using query params, in this case using
         "rut": "111111111",
         "tipo_usuario": "admin"
     }
-]
+
 ```
 
 ### 2. Get daily pedidos
@@ -538,7 +536,7 @@ For this endpoint, you can filter by date using query params, in this case using
 **Response**:
 
 ```json
-[
+
     {
         "_id": "67422eff0ea32bd70cacd2a6",
         "alimento": [
@@ -559,7 +557,6 @@ For this endpoint, you can filter by date using query params, in this case using
         "rut": "12345678-9"
     }
 
-]
 ```
 
 ### 3. Get daily pedidos
@@ -576,7 +573,7 @@ Let's assume today is 2024-11-22.
 **Response**:
 
 ```json
-[
+
     {
         "_id": "67422eff0ea32bd70cacd2a6",
         "alimento": [
@@ -597,7 +594,6 @@ Let's assume today is 2024-11-22.
         "rut": "12345678-9"
     }
 
-]
 ```
 
 ### 4. Get pedidos by RUT
@@ -612,7 +608,7 @@ Let's assume today is 2024-11-22.
 **Response**:
 
 ```json
-[
+
     {
         "_id": "67422eff0ea32bd70cacd2a6",
         "alimento": [
@@ -670,7 +666,7 @@ Let's assume today is 2024-11-22.
         "hora_retiro": "14:00",
         "rut": "12345678-9"
     }
-]
+
 ```
 
 ### 5. Get daily pedido by RUT
@@ -688,7 +684,7 @@ Let's assume today is 2024-11-22 and user RUT is 12345678-9.
 **Response**:
 
 ```json
-[
+
     {
         "_id": "67422eff0ea32bd70cacd2a6",
         "alimento": [
@@ -708,7 +704,7 @@ Let's assume today is 2024-11-22 and user RUT is 12345678-9.
         "hora_retiro": "13:00",
         "rut": "12345678-9"
     }
-]
+
 ```
 
 ### 6. Create pedido
@@ -721,7 +717,7 @@ Let's assume today is 2024-11-22 and user RUT is 12345678-9.
 
 **Body**:
 ```json
-[
+
     {
         "rut":"",
         "alimentos":[
@@ -732,7 +728,7 @@ Let's assume today is 2024-11-22 and user RUT is 12345678-9.
         ]
         "hora_retiro":""
     }
-]
+
 ```
 
 **Response**:
@@ -753,13 +749,13 @@ Let's assume today is 2024-11-22 and user RUT is 12345678-9.
 
 **Body**:
 ```json
-[
+
 {
   "hora_retiro": "14:50",
   "estado": "listo_para_retiro"
 }
 
-]
+
 ```
 
 **Response**:
