@@ -13,6 +13,11 @@ This is the centralized API that is responsible for communicating with the three
 
 
 
+### dotenv() settings
+
+```
+MONGO_URI = "your-mongo-db-uri"
+```
 
 
 
