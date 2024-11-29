@@ -32,33 +32,32 @@ def create_alimento():
     if not data:
         return jsonify({"message": "Datos no proporcionados"}), 400
     
-    # Missing fields
+    # Check missing fields
     missing_fields = [field for field in ["nombre", "tipo"] if field not in data]
     if missing_fields:
         return jsonify({"message": f"Campos faltantes: {', '.join(missing_fields)}"}), 400
 
-    # Generate ID
-    id_counter = db["counters"]  # Collection counters
-    counter = id_counter.find_one_and_update(
-        {"_id": "alimento_id"},
-        {"$inc": {"sequence_value": 1}},
-        upsert=True,  # Create if not exists
-        return_document=True
+    # Get the last alimento to increment the ID
+    last_alimento = alimentos_collection.find_one(
+        {}, 
+        sort=[("id", -1)]  # Sort by ID descending
     )
-    new_id = counter.get("sequence_value", 1)
+    new_id = last_alimento["id"] + 1 if last_alimento else 1  # Incrase or initialize ID
 
+    # Create alimento object
     alimento = {
-        "id": new_id,  # Autoincremental
+        "id": new_id,  # Autoincremental ID
         "nombre": data.get("nombre", "").capitalize(),
         "tipo": data.get("tipo", "").lower()
     }
 
     result = alimentos_collection.insert_one(alimento)
 
-    # Convert ObjectId to string
+    # Convert to ObjectId to be able to serialize it
     alimento["_id"] = str(result.inserted_id)
 
     return jsonify({"message": "Alimento creado exitosamente.", "alimento": alimento}), 201
+
 
 
 # Update alimento PUT 
