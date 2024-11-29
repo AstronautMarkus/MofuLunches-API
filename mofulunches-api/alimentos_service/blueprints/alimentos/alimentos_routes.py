@@ -13,6 +13,17 @@ def get_alimentos():
     alimentos = list(alimentos_collection.find({}, {"_id": 0}))  # exclude _id field
     return jsonify(alimentos), 200
 
+# Get alimento by ID
+@alimentos_bp.route('/alimentos/<int:id>', methods=['GET'])
+def get_alimento(id):
+    # Convertir el ID a un número entero y buscarlo en la colección
+    alimento = alimentos_collection.find_one({"id": id}, {"_id": 0})
+    if not alimento:
+        return jsonify({"message": "Alimento no encontrado."}), 404
+    return jsonify(alimento), 200
+
+
+
 # Create a new alimento
 @alimentos_bp.route('/alimentos', methods=['POST'])
 def create_alimento():
@@ -51,7 +62,7 @@ def create_alimento():
 
 
 # Update alimento PUT 
-@alimentos_bp.route('/alimentos/<string:id>', methods=['PUT'])
+@alimentos_bp.route('/alimentos/<int:id>', methods=['PUT'])
 def update_alimento(id):
     data = request.json
     if not data:

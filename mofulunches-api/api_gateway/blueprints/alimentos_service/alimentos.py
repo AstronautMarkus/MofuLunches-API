@@ -16,6 +16,20 @@ def get_alimentos():
         print(f"Error al conectar con el servicio de alimentos: {e}")
 
         return jsonify({"error": "No se pudo conectar con el servicio de alimentos."}), 502
+    
+# Get alimento by id
+@alimentos_bp.route('/alimentos/<int:id>', methods=['GET'])
+def get_alimento(id):
+    service_url = f"{current_app.config['ALIMENTOS_SERVICE_URL']}/alimentos/{id}"
+    try:
+        response = requests.get(service_url)
+
+        return jsonify(response.json()), response.status_code
+    except requests.exceptions.RequestException as e:
+
+        print(f"Error al conectar con el servicio de alimentos: {e}")
+
+        return jsonify({"error": "No se pudo conectar con el servicio de alimentos."}), 502
 
 # Create alimento
 @alimentos_bp.route('/alimentos', methods=['POST'])
