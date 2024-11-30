@@ -57,7 +57,6 @@ def get_carta(id):
     return jsonify(carta), 200
 
 
-# Create new carta
 @cartas_bp.route('/cartas', methods=['POST'])
 def create_carta():
     required_fields = ["fecha", "alimentos"]  # Required fields
@@ -75,10 +74,16 @@ def create_carta():
 
     # Validate fecha field
     try:
-    # Save fecha in datetime format
-        carta["fecha"] = datetime.strptime(carta["fecha"], "%Y-%m-%d").replace(hour=0, minute=0, second=0, microsecond=0)
+        # Convert fecha to datetime format
+        fecha_obj = datetime.strptime(carta["fecha"], "%Y-%m-%d")
+        carta["fecha"] = fecha_obj.replace(hour=0, minute=0, second=0, microsecond=0)
     except ValueError:
         return jsonify({"message": "El campo 'fecha' debe tener el formato 'YYYY-MM-DD'."}), 400
+
+    # Check if a carta already exists for the same date
+    existing_carta = cartas_collection.find_one({"fecha": carta["fecha"]})
+    if existing_carta:
+        return jsonify({"message": f"Ya existe una carta para la fecha {carta['fecha'].strftime('%Y-%m-%d')}."}), 400
 
     # Validate alimentos field
     if not isinstance(carta["alimentos"], list) or not all(

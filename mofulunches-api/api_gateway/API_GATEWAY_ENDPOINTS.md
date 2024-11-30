@@ -423,14 +423,17 @@ For this endpoint, you can filter by date using query params, in this case using
     "alimentos":[
         {
             "id": "101",
+            "tipo":"almuerzo",
             "nombre": "Pizza de pepperoni"
         },
         {
             "id": "102",
+            "tipo":"ensalada",
             "nombre": "Ensalada César"
         },
         {
             "id": "105",
+            "tipo":"refresco",
             "nombre": "Coca cola"
         }
     ]
