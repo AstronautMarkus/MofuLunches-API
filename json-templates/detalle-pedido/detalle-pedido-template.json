@@ -1,0 +1,16 @@
+{
+    "id":"",
+    "rut":"",
+    "fecha_pedido":"",
+    "cod_diario":"",
+    "cod_unico":"",
+    "alimentos": [
+        {
+            "id":"",
+            "nombre":"",
+            "tipo":""
+        }
+    ],
+    "hora_retiro":"",
+    "estado":""
+}
