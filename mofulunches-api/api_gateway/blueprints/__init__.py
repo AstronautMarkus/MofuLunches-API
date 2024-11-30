@@ -1,8 +1,8 @@
-from .alimentos_service.alimentos import alimentos_bp
-from .pedidos_service.pedidos import pedidos_bp
-from .usuarios_service.usuarios import usuarios_bp
+from .alimentos_service.alimentos import create_alimentos_blueprint
+from .pedidos_service.pedidos import create_pedidos_blueprint
+from .usuarios_service.usuarios import create_usuarios_blueprint
 
 def register_blueprints(app):
-    app.register_blueprint(usuarios_bp, url_prefix='/api')
-    app.register_blueprint(pedidos_bp, url_prefix='/api')
-    app.register_blueprint(alimentos_bp, url_prefix='/api')
+    app.register_blueprint(create_usuarios_blueprint(), url_prefix='/api')
+    app.register_blueprint(create_pedidos_blueprint(), url_prefix='/api')
+    app.register_blueprint(create_alimentos_blueprint(), url_prefix='/api')
