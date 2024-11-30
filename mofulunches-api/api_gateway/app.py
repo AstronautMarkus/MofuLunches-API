@@ -70,6 +70,23 @@ def create_app():
                 "error": f"Unexpected Error: {e}"
             }
 
+    def check_world_time_api_status():
+        """Verifica el estado de la API de Tiempo Mundial."""
+        world_time_api_url = "http://worldtimeapi.org/api/timezone/America/Santiago"
+        try:
+            response = requests.get(world_time_api_url, timeout=2)
+            return {
+                "status": "Online",
+                "url": world_time_api_url,
+                "error": None
+            }
+        except requests.exceptions.RequestException as e:
+            return {
+                "status": "Offline",
+                "url": world_time_api_url,
+                "error": str(e)
+            }
+
     @app.route('/status', methods=['GET'])
     def check_services_status():
         
@@ -96,6 +113,11 @@ def create_app():
         if mongodb_status['status'] == "Offline":
             all_systems_operational = False
 
+        # Check World Time API status
+        world_time_api_status = check_world_time_api_status()
+        if world_time_api_status['status'] == "Offline":
+            all_systems_operational = False
+
         
         system_info = get_system_info()
 
@@ -105,7 +127,8 @@ def create_app():
             statuses=statuses, 
             all_systems_operational=all_systems_operational,
             system_info=system_info,
-            mongodb_status=mongodb_status
+            mongodb_status=mongodb_status,
+            world_time_api_status=world_time_api_status
         )
 
     return app
