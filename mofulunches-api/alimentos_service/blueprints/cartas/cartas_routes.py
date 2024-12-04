@@ -5,8 +5,17 @@ from flask import request, jsonify
 from datetime import datetime
 
 
-db = get_db()
-cartas_collection = db['cartas']
+class CartasCollection:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(CartasCollection, cls).__new__(cls)
+            db = get_db()
+            cls._instance.collection = db['cartas']
+        return cls._instance
+
+cartas_collection = CartasCollection().collection
 
 # Get all cartas
 @cartas_bp.route('/cartas', methods=['GET'])
