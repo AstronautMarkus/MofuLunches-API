@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  alimentos_service:
+    build:
+      context: ./alimentos_service
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001" # Mapped port (change the port if necessary)
+    volumes:
+      - ./alimentos_service:/app
+    env_file:
+      - ./alimentos_service/.env
+
+  api_gateway:
+    build:
+      context: ./api_gateway
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # Maps to the gateway port
+    volumes:
+      - ./api_gateway:/app
+    env_file:
+      - ./api_gateway/.env
+
+  pedidos_service:
+    build:
+      context: ./pedidos_service
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002" # Mapped port for this service
+    volumes:
+      - ./pedidos_service:/app
+    env_file:
+      - ./pedidos_service/.env
+
+  usuarios_service:
+    build:
+      context: ./usuarios_service
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003" # Mapped port for this service
+    volumes:
+      - ./usuarios_service:/app
+    env_file:
+      - ./usuarios_service/.env
