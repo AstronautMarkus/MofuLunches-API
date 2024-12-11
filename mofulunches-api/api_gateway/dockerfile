@@ -9,7 +9,6 @@ COPY requirements.txt ./
 COPY app.py ./
 COPY blueprints ./blueprints
 COPY config.py ./
-COPY utils ./utils
 COPY .env ./
 
 # Install dependencies
