@@ -4,8 +4,17 @@ from utils.db_utils import get_db
 from flask import request, jsonify
 
 
-db = get_db()
-alimentos_collection = db['alimentos']
+class AlimentosCollection:
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(AlimentosCollection, cls).__new__(cls)
+            db = get_db()
+            cls._instance.collection = db['alimentos']
+        return cls._instance
+
+alimentos_collection = AlimentosCollection().collection
 
 # Get all alimentos
 @alimentos_bp.route('/alimentos', methods=['GET'])
