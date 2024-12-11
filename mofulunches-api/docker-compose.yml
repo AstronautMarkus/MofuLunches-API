@@ -11,6 +11,8 @@ services:
       - ./alimentos_service:/app
     env_file:
       - ./alimentos_service/.env
+    networks:
+      - mofulunches_network
 
   api_gateway:
     build:
@@ -22,6 +24,8 @@ services:
       - ./api_gateway:/app
     env_file:
       - ./api_gateway/.env
+    networks:
+      - mofulunches_network
 
   pedidos_service:
     build:
@@ -33,6 +37,8 @@ services:
       - ./pedidos_service:/app
     env_file:
       - ./pedidos_service/.env
+    networks:
+      - mofulunches_network
 
   usuarios_service:
     build:
@@ -44,3 +50,9 @@ services:
       - ./usuarios_service:/app
     env_file:
       - ./usuarios_service/.env
+    networks:
+      - mofulunches_network
+
+networks:
+  mofulunches_network:
+    driver: bridge
