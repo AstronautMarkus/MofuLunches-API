@@ -30,7 +30,11 @@ def create_pedidos_blueprint():
     # Pedidos service routes
     @pedidos_bp.route('/pedidos', methods=['GET'])
     def get_pedidos():
-        return handle_request("pedidos", "GET")
+        params = {
+            "desde": request.args.get("desde"),
+            "hasta": request.args.get("hasta")
+        }
+        return handle_request("pedidos", "GET", params=params)
 
     @pedidos_bp.route('/pedidos/diarios', methods=['GET'])
     def get_pedidos_diarios():

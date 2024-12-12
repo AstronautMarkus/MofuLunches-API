@@ -511,7 +511,11 @@ For this endpoint, you can filter by date using query params, in this case using
 
 **Method**: `GET`
 
-**Description**: Get all pedidos list.
+**Description**: Get all pedidos list. You can filter by date using query params `desde` and `hasta`.
+
+**Query Parameters**:
+- `desde` (optional): Start date in YYYY-MM-DD format.
+- `hasta` (optional): End date in YYYY-MM-DD format.
 
 **Response**:
 
