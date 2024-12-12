@@ -42,7 +42,11 @@ def create_pedidos_blueprint():
 
     @pedidos_bp.route('/pedidos/<rut>', methods=['GET'])
     def get_pedidos_by_rut(rut):
-        return handle_request(f"pedidos/{rut}", "GET")
+        params = {
+            "desde": request.args.get("desde"),
+            "hasta": request.args.get("hasta")
+        }
+        return handle_request(f"pedidos/{rut}", "GET", params=params)
 
     @pedidos_bp.route('/pedidos/diarios/<rut>', methods=['GET'])
     def get_pedidos_diarios_by_rut(rut):

@@ -105,6 +105,10 @@ SECRET_KEY = "flask-secret-key"
 
 **Method**: `GET`
 
+**Query Parameters**:
+- `desde` (optional): Start date for filtering pedidos.
+- `hasta` (optional): End date for filtering pedidos.
+
 **Description**: Bring the complete list of 'pedidos', using User's RUT.
 
 **Response**:
