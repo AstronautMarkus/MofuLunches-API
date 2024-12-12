@@ -28,6 +28,10 @@ SECRET_KEY = "flask-secret-key"
 
 **Method**: `GET`
 
+**Query Parameters**:
+- `desde` (optional): Start date for filtering pedidos.
+- `hasta` (optional): End date for filtering pedidos.
+
 **Description**: Get full 'pedidos' list, with 
 
 **Response**:

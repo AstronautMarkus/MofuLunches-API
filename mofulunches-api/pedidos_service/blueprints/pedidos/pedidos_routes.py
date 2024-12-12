@@ -22,12 +22,26 @@ pedidos_collection = PedidosCollection().collection
 # Get pedidos full list
 @pedidos_bp.route('/pedidos', methods=['GET'])
 def get_pedidos():
-    pedidos = list(pedidos_collection.find({}))
-    
+    # Query params
+    fecha_inicio = request.args.get("desde")  # min date
+    fecha_fin = request.args.get("hasta")  # max date
+
+    # MongoDB filter
+    filtro = {}
+    if fecha_inicio or fecha_fin:
+        filtro["fecha_pedido"] = {}
+        if fecha_inicio:
+            filtro["fecha_pedido"]["$gte"] = fecha_inicio
+        if fecha_fin:
+            filtro["fecha_pedido"]["$lte"] = fecha_fin
+
+    # MongoDB query
+    pedidos = list(pedidos_collection.find(filtro))
+
     # Convert ObjectId to string
     for pedido in pedidos:
         pedido['_id'] = str(pedido['_id'])
-
+        
     return jsonify(pedidos), 200
 
 
