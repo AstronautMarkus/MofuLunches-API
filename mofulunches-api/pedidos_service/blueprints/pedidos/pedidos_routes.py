@@ -62,7 +62,20 @@ def get_pedidos_diarios():
 # Get all pedidos by rut
 @pedidos_bp.route('/pedidos/<rut>', methods=['GET'])
 def get_pedidos_by_rut(rut):
-    pedidos = list(pedidos_collection.find({"rut": rut}))
+    # Query params
+    fecha_inicio = request.args.get("desde")  # min date
+    fecha_fin = request.args.get("hasta")  # max date
+
+    # MongoDB filter
+    filtro = {"rut": rut}
+    if fecha_inicio or fecha_fin:
+        filtro["fecha_pedido"] = {}
+        if fecha_inicio:
+            filtro["fecha_pedido"]["$gte"] = fecha_inicio
+        if fecha_fin:
+            filtro["fecha_pedido"]["$lte"] = fecha_fin
+
+    pedidos = list(pedidos_collection.find(filtro))
     
     for pedido in pedidos:
         pedido['_id'] = str(pedido['_id'])
