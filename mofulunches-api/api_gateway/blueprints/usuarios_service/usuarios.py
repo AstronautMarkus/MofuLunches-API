@@ -50,6 +50,9 @@ def create_usuarios_blueprint():
     def update_user_partially(rut):
         return handle_request(f"usuarios/{rut}", "PATCH", json=request.json)
 
+    @usuarios_bp.route('/usuarios/<rut>', methods=['DELETE'])
+    def delete_user(rut):
+        return handle_request(f"usuarios/{rut}", "DELETE")
 
     @usuarios_bp.route('/usuarios/login', methods=['POST'])
     def login_user():

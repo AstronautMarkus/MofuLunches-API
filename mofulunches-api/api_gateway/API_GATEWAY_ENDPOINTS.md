@@ -225,6 +225,30 @@ You can put one or more characters as you prefer.
 }
 ```
 
+### 7. Delete user
+
+**URL**: `/api/usuarios/<rut>`
+
+**Method**: `DELETE`
+
+**Description**: Deletes a user by its RUT.
+
+**Response - Deleted (200)**:
+
+```json
+{
+    "message": "Usuario eliminado exitosamente."
+}
+```
+
+**Response - User not found (404)**:
+
+```json
+{
+    "error": "Usuario no encontrado."
+}
+```
+
 ---
 
 
