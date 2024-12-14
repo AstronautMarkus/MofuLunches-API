@@ -30,6 +30,7 @@ services:
       - TZ=America/Santiago # Set timezone
     networks:
       - mofulunches_network
+    command: ["python", "app.py"]
 
   pedidos_service:
     build:

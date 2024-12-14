@@ -12,10 +12,10 @@ COPY config.py ./
 COPY .env ./
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt && pip install gunicorn
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expose the port on which the application will run
 EXPOSE 5000
 
 # Command to run the application
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
+CMD ["python", "app.py"]
