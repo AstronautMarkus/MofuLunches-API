@@ -7,8 +7,11 @@ services:
       - "5001:5001" # Mapped port (change the port if necessary)
     volumes:
       - ./alimentos_service:/app
+      - /etc/localtime:/etc/localtime:ro # Sync with host time
     env_file:
       - ./alimentos_service/.env
+    environment:
+      - TZ=America/Santiago # Set timezone to America/Santiago
     networks:
       - mofulunches_network
 
@@ -20,8 +23,11 @@ services:
       - "5000:5000" # Maps to the gateway port
     volumes:
       - ./api_gateway:/app
+      - /etc/localtime:/etc/localtime:ro # Sync with host time
     env_file:
       - ./api_gateway/.env
+    environment:
+      - TZ=America/Santiago # Set timezone
     networks:
       - mofulunches_network
 
@@ -33,8 +39,11 @@ services:
       - "5002:5002" # Mapped port for this service
     volumes:
       - ./pedidos_service:/app
+      - /etc/localtime:/etc/localtime:ro # Sync with host time
     env_file:
       - ./pedidos_service/.env
+    environment:
+      - TZ=America/Santiago # Set timezone to America/Santiago
     networks:
       - mofulunches_network
 
@@ -46,8 +55,11 @@ services:
       - "5003:5003" # Mapped port for this service
     volumes:
       - ./usuarios_service:/app
+      - /etc/localtime:/etc/localtime:ro # Sync with host time
     env_file:
       - ./usuarios_service/.env
+    environment:
+      - TZ=America/Santiago # Set timezone to America/Santiago
     networks:
       - mofulunches_network
 
