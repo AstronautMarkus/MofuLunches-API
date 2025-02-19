@@ -75,18 +75,31 @@ def delete_user(rut):
 def create_user():
     data = request.json
 
-    required_fields = ["rut", "nombre", "apellido", "correo", "contrasena", "codigo_RFID", "tipo_usuario"]
+    required_fields = ["rut", "nombre", "apellido", "correo", "contrasena", "tipo_usuario"]
     missing_fields = [field for field in required_fields if field not in data]
     if missing_fields:
         return jsonify({"error": f"Campos faltantes: {', '.join(missing_fields)}"}), 400
 
+    # Verify RUT is an integer and has valid length
+    try:
+        int(data["rut"])
+        if not (8 <= len(data["rut"]) <= 9):
+            return jsonify({"error": "El RUT debe tener entre 8 y 9 caracteres."}), 400
+    except ValueError:
+        return jsonify({"error": "El campo RUT solo debe contener números."}), 400
+
     if users_collection.find_one({"rut": data["rut"]}):
         return jsonify({"error": "El RUT ya existe."}), 400
+
+    # Validate tipo_usuario
+    valid_user_types = ["cocineros", "admin", "empleado"]
+    if data["tipo_usuario"].lower() not in valid_user_types:
+        return jsonify({"error": f"Tipo de usuario inválido. Debe ser uno de los siguientes: {', '.join(valid_user_types)}"}), 400
 
     data["nombre"] = data["nombre"].capitalize()
     data["apellido"] = data["apellido"].capitalize()
     data["correo"] = data["correo"].lower()
-    data["codigo_RFID"] = data["codigo_RFID"].upper()
+    data["codigo_RFID"] = data.get("codigo_RFID", "NO_ASIGNADO").upper()
     data["tipo_usuario"] = data["tipo_usuario"].lower()
     data["contrasena"] = generate_password_hash(data["contrasena"], method='pbkdf2:sha256')
 
